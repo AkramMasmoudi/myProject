@@ -4,7 +4,9 @@ import com.akram.myProject.entities.Article;
 import com.akram.myProject.repositories.ArticleRepository;
 import com.akram.myProject.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     ArticleRepository articleRepository;
