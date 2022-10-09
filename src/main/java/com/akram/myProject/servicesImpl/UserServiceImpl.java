@@ -18,20 +18,24 @@ import java.util.Arrays;
 import java.util.Collection;
 @Slf4j
 @Service
-
 public class UserServiceImpl implements UserService, UserDetailsService {
+    public static final String INFO_SAVE =  "save user ({}) with password token : ";
+    public static final String USER_NOT_FOUND =  "User {} not found in DB :(";
+    public static final String USER_FOUND =  "User {} found in DB :)";
+    public static final String USER_NULL = "user is null in saveUser Methode";
     @Autowired
     UserRepository userRepository;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public void saveUser(User user) throws AuthenticationException{
         if(user != null){
            user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
-            log.info("save user ("+user.getUserLogin()+") with password token : "+user.getUserPassword());
+            log.info(INFO_SAVE+user.getUserPassword(),user.getUserLogin());
             userRepository.save(user);
         }else
-            throw new NullPointerException("user is null in saveUser Methode") ;
+            throw new NullPointerException(USER_NULL) ;
 
     }
 
@@ -39,10 +43,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findUserByUserLogin(username);
         if(user == null){
-            log.info("User "+username+" not found in DB !");
-            throw new UsernameNotFoundException("User "+username+" Not found in DB");
+            log.info(USER_NOT_FOUND,username);
+            throw new UsernameNotFoundException(USER_NOT_FOUND.replace("{}",username));
         }else{
-            log.info("User "+username+" found in DB :)");
+            log.info(USER_FOUND,username);
         }
         Collection<SimpleGrantedAuthority> authorities =
                 Arrays.asList(new SimpleGrantedAuthority( user.getUserRole()));

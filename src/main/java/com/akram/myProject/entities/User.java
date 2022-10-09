@@ -2,6 +2,7 @@ package com.akram.myProject.entities;
 
 import com.akram.myProject.globalVariables.UserRoles;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @ToString
 @Entity
 @Table(name = "Users")
+@Slf4j
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,11 +28,11 @@ public class User implements Serializable {
     private String userRole;
 
     public void setUserRole(String userRole) {
-        if(UserRoles.admin.equalsIgnoreCase(userRole) || UserRoles.user.equalsIgnoreCase(userRole))
+        if(UserRoles.ADMIN.equalsIgnoreCase(userRole) || UserRoles.USER.equalsIgnoreCase(userRole) || UserRoles.WATCHER.equalsIgnoreCase(userRole))
             this.userRole = userRole.toUpperCase();
         else {
-            System.err.println("error in setUserRole : userRole value ("+userRole+") is not valid");
-            this.userRole = UserRoles.user;
+            log.error("error in setUserRole : userRole value ("+userRole+") is not valid");
+            this.userRole = UserRoles.WATCHER;
         }
     }
 }
