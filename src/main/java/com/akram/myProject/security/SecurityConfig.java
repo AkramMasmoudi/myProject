@@ -9,6 +9,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
 
 import static com.akram.myProject.globalVariables.UserRoles.ADMIN;
 import static com.akram.myProject.globalVariables.UserRoles.USER;
@@ -26,9 +33,10 @@ public class SecurityConfig  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         final String userPattern = "/user/**";
         final String allPattern = "/**";
-        http.cors().and().csrf().disable();
+        http.csrf().disable();
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().mvcMatchers(userPattern).hasAuthority(ADMIN);
+        http.authorizeRequests().mvcMatchers(userPattern).hasAuthority(ADMIN);//permitAll()
         http.authorizeRequests().mvcMatchers(POST,allPattern).hasAnyAuthority(USER,ADMIN);
         http.authorizeRequests().mvcMatchers(PUT,allPattern).hasAnyAuthority(USER,ADMIN);
         http.authorizeRequests().mvcMatchers(PATCH,allPattern).hasAnyAuthority(USER,ADMIN);
@@ -38,6 +46,4 @@ public class SecurityConfig  {
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-
 }

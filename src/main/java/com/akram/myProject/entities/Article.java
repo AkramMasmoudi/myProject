@@ -27,6 +27,8 @@ public class Article implements Serializable {
     private Category articleCategoryId;
     @Column
     private double articlePrice;
+    @Column
+    private double purchasingPrice;
     @ManyToOne()
     @JoinColumn(name = "unitId")
     private Unit articleDefaultUnit;

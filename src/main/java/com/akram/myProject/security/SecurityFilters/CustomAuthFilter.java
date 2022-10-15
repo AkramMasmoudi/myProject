@@ -1,6 +1,7 @@
 package com.akram.myProject.security.SecurityFilters;
 
 import com.akram.myProject.globalVariables.SecurityKeys;
+import com.akram.myProject.globalVariables.UserRoles;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -49,7 +51,7 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String userLogin = request.getParameter("userLogin");
         String userPassword = request.getParameter("userPassword");
-        log.info("login : "+userLogin+"\npassword : "+userPassword);
+        log.info("login : "+userLogin+" password : "+userPassword);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLogin,userPassword);
         return authenticationManager.authenticate(authenticationToken);
     }
@@ -59,10 +61,12 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter {
         log.info("successful Authentication !!");
         User user = (User) auth.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256(CODE_HMAC256.getBytes());
+        List<String> lstRoles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        int expiresDateCoefficient = lstRoles.contains(UserRoles.ADMIN) ? 1 : 10;
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
-                .withClaim(ROLES_KEY,user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withExpiresAt(new Date(System.currentTimeMillis() + expiresDateCoefficient * 60 * 60 * 1000))
+                .withClaim(ROLES_KEY,lstRoles)
                 .sign(algorithm);
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
