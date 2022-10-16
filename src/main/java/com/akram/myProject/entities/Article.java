@@ -21,7 +21,7 @@ public class Article implements Serializable {
     @Column
     private String articleName;
     @Column
-    private long availableQte;
+    private Double availableQte;
     @ManyToOne()
     @JoinColumn(name = "categoryId")
     private Category articleCategoryId;
