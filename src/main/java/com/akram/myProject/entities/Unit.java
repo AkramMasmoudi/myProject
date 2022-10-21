@@ -23,6 +23,9 @@ public class Unit implements Serializable {
     @Column(unique = true,nullable = false)
     private String name;
     @Column
-    @OneToMany(mappedBy = "articleDefaultUnit",fetch = FetchType.LAZY)
-    private List<Article> lstArticle;
+    @OneToMany(mappedBy = "unitId",fetch = FetchType.LAZY)
+    private List<Quantities> lstQuantities;
+    @Column
+    @OneToMany(mappedBy = "unitId",fetch = FetchType.LAZY)
+    private List<Coefficient> lstCoefficients;
 }

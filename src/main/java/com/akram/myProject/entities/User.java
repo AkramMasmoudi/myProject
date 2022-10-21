@@ -3,6 +3,7 @@ package com.akram.myProject.entities;
 import com.akram.myProject.globalVariables.UserRoles;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,7 +27,6 @@ public class User implements Serializable {
     @Column(nullable = false)
     @Setter(value=AccessLevel.NONE)
     private String userRole;
-
     public void setUserRole(String userRole) {
         if(UserRoles.ADMIN.equalsIgnoreCase(userRole) || UserRoles.USER.equalsIgnoreCase(userRole) || UserRoles.WATCHER.equalsIgnoreCase(userRole))
             this.userRole = userRole.toUpperCase();

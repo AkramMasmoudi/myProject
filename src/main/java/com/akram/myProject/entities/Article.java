@@ -20,8 +20,6 @@ public class Article implements Serializable {
     private Long articleId;
     @Column
     private String articleName;
-    @Column
-    private Double availableQte;
     @ManyToOne()
     @JoinColumn(name = "categoryId")
     private Category articleCategoryId;
@@ -29,12 +27,15 @@ public class Article implements Serializable {
     private double articlePrice;
     @Column
     private double purchasingPrice;
-    @ManyToOne()
-    @JoinColumn(name = "unitId")
-    private Unit articleDefaultUnit;
     @Column
     @OneToMany(mappedBy = "coefficientArticleId",fetch = FetchType.LAZY)
     private List<Coefficient> lstCoefficient;
+    @Column
+    @OneToMany(mappedBy = "quantityArticleId",fetch = FetchType.LAZY)
+    private List<Quantities> lstQuantity;
+    @Column
+    @OneToMany(mappedBy = "priceArticleId",fetch = FetchType.LAZY)
+    private List<Price> lstPrices;
     @Column
     private String articleReference;
     @Column
