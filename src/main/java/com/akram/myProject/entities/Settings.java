@@ -20,4 +20,12 @@ public class Settings implements Serializable {
     @Column(nullable = false)
     @Value("${my.default.language:fr-FR")
     private String language;
+    @ManyToOne()
+    @JoinColumn(name = "userId")
+    private User user;
+
+    public Settings(String language, User user) {
+        this.language = language;
+        this.user = user;
+    }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.akram.myProject.globalVariables.UserRoles.ADMIN;
 import static com.akram.myProject.globalVariables.UserRoles.USER;
@@ -33,8 +34,13 @@ public class SecurityConfig  {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         final String userPattern = "/user/**";
         final String allPattern = "/**";
+
+        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+
         http.csrf().disable();
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+
+        http.cors().configurationSource(request -> corsConfiguration);
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().mvcMatchers(userPattern).hasAuthority(ADMIN);//permitAll()
         http.authorizeRequests().mvcMatchers(POST,allPattern).hasAnyAuthority(USER,ADMIN);

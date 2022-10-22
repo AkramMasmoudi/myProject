@@ -1,4 +1,4 @@
-/*
+/*INSERT INTO `newproject`.`users`(`user_id`,`user_login`,`user_password`,`user_role`)VALUES('2','user','$2a$10$xBi7baugtMcdOpnmFvpIv.Hw87VkWA3RQZzB3Bcr1uUqZm1wPuVaO','USER');
 INSERT INTO `newproject`.`unit` (`unit_id`, `name`, `short_name`) VALUES ('1', 'metre carré', 'm2');
 INSERT INTO `newproject`.`unit` (`unit_id`, `name`, `short_name`) VALUES ('2', 'pièce', 'piece');
 INSERT INTO `newproject`.`unit` (`unit_id`, `name`, `short_name`) VALUES ('3', 'carton', 'ct');
@@ -18,6 +18,4 @@ INSERT INTO `newproject`.`category` (`category_id`, `category_name`) VALUES ('13
 INSERT INTO `newproject`.`category` (`category_id`, `category_name`) VALUES ('14', 'semi-grès');
 INSERT INTO `newproject`.`category` (`category_id`, `category_name`) VALUES ('15', 'PLINTHE');
 INSERT INTO `newproject`.`category` (`category_id`, `category_name`) VALUES ('16', 'semi gres');
-INSERT INTO `newproject`.`category` (`category_id`, `category_name`) VALUES ('17', 'mosaique');
-*/
-/*'2', 'user', '$2a$10$xBi7baugtMcdOpnmFvpIv.Hw87VkWA3RQZzB3Bcr1uUqZm1wPuVaO', 'USER'*/
+INSERT INTO `newproject`.`category` (`category_id`, `category_name`) VALUES ('17', 'mosaique');*/

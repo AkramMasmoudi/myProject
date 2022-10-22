@@ -5,9 +5,11 @@ import com.akram.myProject.repositories.UserRepository;
 import com.akram.myProject.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,5 +55,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 Arrays.asList(new SimpleGrantedAuthority( user.getUserRole()));
         return new org.springframework.security.core.userdetails.User( user.getUserLogin(),user.getUserPassword(),
                 authorities);
+    }
+    @Override
+    public User findAuthenticatedUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userLogin = (String) auth.getPrincipal();
+        User user = userRepository.findUserByUserLogin(userLogin);
+        return user;
     }
 }
