@@ -5,11 +5,14 @@ import com.akram.myProject.entities.Settings;
 import com.akram.myProject.entities.User;
 import com.akram.myProject.services.SettingsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -31,14 +34,14 @@ public class SettingsController {
 
     }
     @GetMapping("/language")
-    public ResponseEntity<String> findLanguageByUserId(){
+    @ResponseBody
+    public String findLanguageByUserId(){
 
         try{
-            String lang = settingsService.findLanguageByUserId();
-            return new ResponseEntity<String>(lang, OK);
+            return settingsService.findLanguageByUserId();
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("", EXPECTATION_FAILED);
+            return "";
         }
 
     }
