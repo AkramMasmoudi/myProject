@@ -18,15 +18,11 @@ public class Article implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true,nullable = false,updatable = false)
     private Long articleId;
-    @Column
+    @Column(nullable = false)
     private String articleName;
     @ManyToOne()
     @JoinColumn(name = "categoryId")
     private Category articleCategoryId;
-    @Column
-    private double articlePrice;
-    @Column
-    private double purchasingPrice;
     @Column
     @OneToMany(mappedBy = "coefficientArticleId",fetch = FetchType.LAZY)
     private List<Coefficient> lstCoefficient;
@@ -41,4 +37,17 @@ public class Article implements Serializable {
     @Column
     @OneToMany(mappedBy = "orderLineArticleId",fetch = FetchType.LAZY)
     private List<OrderLine> lstOrderLines;
+
+    public Article(String articleName, Category articleCategoryId, String articleReference) {
+        this.articleName = articleName;
+        this.articleCategoryId = articleCategoryId;
+        this.articleReference = articleReference;
+    }
+
+    public Article(Long articleId, String articleName, Category articleCategoryId, String articleReference) {
+        this.articleId = articleId;
+        this.articleName = articleName;
+        this.articleCategoryId = articleCategoryId;
+        this.articleReference = articleReference;
+    }
 }
