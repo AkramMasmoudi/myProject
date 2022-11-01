@@ -28,6 +28,6 @@ public class Check implements Serializable {
     private LocalDate checkDate;
     @ManyToOne()
     @JoinColumn(name = "orderId")
-    private Person checkOrderId;
+    private Order checkOrderId;
 
 }

@@ -22,9 +22,11 @@ public class Unit implements Serializable {
     private String shortName;
     @Column(unique = true,nullable = false)
     private String name;
+    @ToString.Exclude
     @Column
     @OneToMany(mappedBy = "unitId",fetch = FetchType.LAZY)
     private List<Quantities> lstQuantities;
+    @ToString.Exclude
     @Column
     @OneToMany(mappedBy = "unitId",fetch = FetchType.LAZY)
     private List<Coefficient> lstCoefficients;
