@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static org.springframework.http.HttpStatus.*;
@@ -172,6 +174,16 @@ public class ArticleController {
             return new ResponseEntity<>(quantitiesSaved, OK);
         }catch (Exception e){
             return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PutMapping ("/safeRemove")
+    public ResponseEntity<List<ArticleVO>> removeArticle(@RequestParam(required = true) Long articleId){
+        try {
+            articleService.safeRemoveArticle(articleId);
+            List<ArticleVO> articles = articleService.findAllArticles(EAGER);
+            return new ResponseEntity<>(articles, OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null,INTERNAL_SERVER_ERROR);
         }
     }
 }

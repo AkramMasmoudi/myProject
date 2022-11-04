@@ -6,12 +6,12 @@ import com.akram.myProject.entities.Unit;
 import com.akram.myProject.objects.ArticleVO;
 import com.akram.myProject.objects.CategoryVO;
 import com.akram.myProject.objects.UnitVO;
-import com.akram.myProject.repositories.ArticleRepository;
-import com.akram.myProject.repositories.CategoryRepository;
-import com.akram.myProject.repositories.UnitRepository;
+import com.akram.myProject.repositories.*;
 import com.akram.myProject.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.FetchType;
 import java.util.List;
@@ -26,7 +26,14 @@ public class ArticleServiceImpl implements ArticleService {
     CategoryRepository categoryRepository;
     @Autowired
     UnitRepository unitRepository;
-
+    @Autowired
+    PriceRepository priceRepository;
+    @Autowired
+    CoefficientRepository coefficientRepository;
+    @Autowired
+    QuantityRepository quantityRepository;
+    @Autowired
+    OrderLineRepository orderLineRepository;
     @Override
     public Article saveArticle(Article article) {
         return articleRepository.save(article);
@@ -34,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleVO> findAllArticles(FetchType fetchType) {
-        List<Article> articles = articleRepository.findAll();
+        List<Article> articles = articleRepository.findAllByRemovedIsFalse();
         return articles.stream().map(article -> new ArticleVO(article,fetchType)).collect(Collectors.toList());
     }
 
@@ -56,6 +63,27 @@ public class ArticleServiceImpl implements ArticleService {
     }
     @Override
     public Optional<Article> findArticleById(Long id){
-        return articleRepository.findById(id);
+        return articleRepository.findArticleByArticleIdAndRemovedIsFalse(id);
     }
+
+    @Transactional
+    @Override
+    public boolean deleteArticle(Long id){
+        /* NOT USED , USE removeArticle METHOD INSTEAD */
+        long orderLines = orderLineRepository.countAllByOrderLineArticleId(id);
+        if(orderLines > 0)
+            return false;
+        priceRepository.deleteAllByPriceArticleId(id);
+        coefficientRepository.deleteAllByCoefficientArticleId(id);
+        priceRepository.deleteAllByPriceArticleId(id);
+        quantityRepository.deleteAllByQuantityArticleId(id);
+        articleRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public void safeRemoveArticle(Long id){
+        articleRepository.safeRemoveArticleById(id);
+    }
+
 }

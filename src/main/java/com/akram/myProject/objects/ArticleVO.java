@@ -27,11 +27,12 @@ public class ArticleVO implements Serializable {
     private List<QuantitiesVO> lstQuantity;
     private List<PriceVO> lstPrices;
     private List<OrderLineVO> lstOrderLines;
-
+    private Boolean removed = false;
     public ArticleVO(Article article, FetchType fetchType){
         this.articleId = article.getArticleId();
         this.articleName = article.getArticleName();
         this.articleReference = article.getArticleReference();
+        this.removed = article.getRemoved() == null ? false : article.getRemoved();
         this.articleCategory = new CategoryVO(article.getArticleCategoryId(),LAZY);
         if(fetchType.equals(LAZY)){
             this.lstCoefficient = new ArrayList<>();

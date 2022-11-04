@@ -24,6 +24,7 @@ public class PriceVO implements Serializable {
     public PriceVO(Price price, FetchType fetchType){
         this.priceId = price.getPriceId();
         this.price = price.getPrice();
+        this.priceType = price.getPriceType();
         this.unit = new UnitVO(price.getUnitId(),LAZY);
         this.priceArticle = new ArticleVO(price.getPriceArticleId(),LAZY);
     }

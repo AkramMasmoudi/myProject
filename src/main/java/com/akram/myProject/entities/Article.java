@@ -1,6 +1,8 @@
 package com.akram.myProject.entities;
 
 import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -41,11 +43,14 @@ public class Article implements Serializable {
     @Column
     @OneToMany(mappedBy = "orderLineArticleId",fetch = FetchType.LAZY)
     private List<OrderLine> lstOrderLines;
+    @Column(columnDefinition = "boolean default false")
+    private Boolean removed;
 
     public Article(String articleName, Category articleCategoryId, String articleReference) {
         this.articleName = articleName;
         this.articleCategoryId = articleCategoryId;
         this.articleReference = articleReference;
+        this.removed = false;
     }
 
     public Article(Long articleId, String articleName, Category articleCategoryId, String articleReference) {
@@ -53,5 +58,6 @@ public class Article implements Serializable {
         this.articleName = articleName;
         this.articleCategoryId = articleCategoryId;
         this.articleReference = articleReference;
+        this.removed = false;
     }
 }

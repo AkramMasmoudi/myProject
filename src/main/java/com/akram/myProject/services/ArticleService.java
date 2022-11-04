@@ -7,6 +7,7 @@ import com.akram.myProject.objects.ArticleVO;
 import com.akram.myProject.objects.CategoryVO;
 import com.akram.myProject.objects.UnitVO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.FetchType;
 import java.util.List;
@@ -21,4 +22,9 @@ public interface ArticleService {
     Optional<Category> findCategoryByCategoryId(Long categoryId);
 
     Optional<Article> findArticleById(Long id);
+
+    @Transactional
+    boolean deleteArticle(Long id);
+
+    void safeRemoveArticle(Long id);
 }
