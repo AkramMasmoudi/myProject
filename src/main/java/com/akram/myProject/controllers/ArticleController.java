@@ -13,15 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static org.springframework.http.HttpStatus.*;
@@ -184,6 +181,31 @@ public class ArticleController {
             return new ResponseEntity<>(articles, OK);
         }catch (Exception e){
             return new ResponseEntity<>(null,INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/unit/add")
+    public ResponseEntity<List<UnitVO>> addUnit(@RequestBody Unit unit){
+        try{
+            if(unit != null && unit.getName() != null && !unit.getName().isBlank()
+                            && unit.getShortName() != null && !unit.getShortName().isBlank()){
+                articleService.addUnit(unit);
+            }
+            List<UnitVO> units = articleService.findAllUnits(LAZY);
+            return new ResponseEntity<>(units, OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ArrayList<>(), INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("/category/add")
+    public ResponseEntity<List<CategoryVO>> addCategory(@RequestBody Category category){
+        try{
+            if(category != null && category.getCategoryName() != null && !category.getCategoryName().isBlank()){
+                articleService.addCategory(category);
+            }
+            List<CategoryVO> categories = articleService.findAllCategories(LAZY);
+            return new ResponseEntity<>(categories, OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ArrayList<>(), INTERNAL_SERVER_ERROR);
         }
     }
 }

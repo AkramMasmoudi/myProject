@@ -9,7 +9,6 @@ import com.akram.myProject.objects.UnitVO;
 import com.akram.myProject.repositories.*;
 import com.akram.myProject.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,4 +85,12 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.safeRemoveArticleById(id);
     }
 
+    @Override
+    public void addUnit(Unit unit) {
+        unitRepository.save(unit);
+    }
+    @Override
+    public void addCategory(Category category) {
+       categoryRepository.save(category);
+    }
 }
