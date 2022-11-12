@@ -64,7 +64,14 @@ public class ArticleServiceImpl implements ArticleService {
     public Optional<Article> findArticleById(Long id){
         return articleRepository.findArticleByArticleIdAndRemovedIsFalse(id);
     }
-
+    @Override
+    public ArticleVO findArticleById(Long id,FetchType fetchType){
+        Optional<Article> article = articleRepository.findArticleByArticleIdAndRemovedIsFalse(id);
+        if(article.isPresent())
+            return new ArticleVO(article.get(),fetchType);
+        else
+            return null;
+    }
     @Transactional
     @Override
     public boolean deleteArticle(Long id){

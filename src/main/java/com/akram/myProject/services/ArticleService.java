@@ -20,6 +20,7 @@ public interface ArticleService {
     List<UnitVO> findAllUnits(FetchType fetchType);
     Optional<Category> findCategoryByCategoryId(Long categoryId);
     Optional<Article> findArticleById(Long id);
+    ArticleVO findArticleById(Long id, FetchType fetchType);
     @Transactional
     boolean deleteArticle(Long id);
     void safeRemoveArticle(Long id);

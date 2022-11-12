@@ -15,6 +15,8 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public List<Price> saveAllPrices(List<Price> prices) {
+        if(!prices.isEmpty())
+            priceRepository.deleteAllByPriceArticleId(prices.get(0).getPriceArticleId().getArticleId());
         return priceRepository.saveAll(prices);
     }
 }

@@ -45,6 +45,17 @@ public class ArticleController {
         }
 
     }
+    @GetMapping("/article/{articleId}")
+    public ResponseEntity<ArticleVO> findArticleById(@PathVariable Long articleId){
+
+        try{
+            ArticleVO article = articleService.findArticleById(articleId,EAGER);
+            return new ResponseEntity<>(article, OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+        }
+
+    }
     @GetMapping("/categories")
     public ResponseEntity<List<CategoryVO>> findAllCategories(){
 

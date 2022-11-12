@@ -14,6 +14,8 @@ public class CoefficientServiceImpl implements CoefficientService {
 
     @Override
     public List<Coefficient> saveAllCoefficient(List<Coefficient> coefficients) {
-       return coefficientRepository.saveAll(coefficients);
+        if(!coefficients.isEmpty())
+            coefficientRepository.deleteAllByCoefficientArticleId(coefficients.get(0).getCoefficientArticleId().getArticleId());
+        return coefficientRepository.saveAll(coefficients);
     }
 }

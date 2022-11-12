@@ -13,6 +13,8 @@ public class QuantityServiceImpl implements QuantityService {
     private QuantityRepository quantityRepository;
     @Override
     public List<Quantities> saveAllQuantities(List<Quantities> quantities) {
+        if(!quantities.isEmpty())
+            quantityRepository.deleteAllByQuantityArticleId(quantities.get(0).getQuantityArticleId().getArticleId());
         return quantityRepository.saveAll(quantities);
     }
 }
