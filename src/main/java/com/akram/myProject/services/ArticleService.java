@@ -24,6 +24,6 @@ public interface ArticleService {
     @Transactional
     boolean deleteArticle(Long id);
     void safeRemoveArticle(Long id);
-    void addUnit(Unit unit);
-    void addCategory(Category category);
+    int addUnit(Unit unit);
+    int addCategory(Category category);
 }

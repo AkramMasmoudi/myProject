@@ -1,24 +1,20 @@
 package com.akram.myProject.controllers;
 
 import com.akram.myProject.entities.*;
+import com.akram.myProject.services.*;
 import com.akram.myProject.objects.ArticleVO;
 import com.akram.myProject.objects.CategoryVO;
+import com.akram.myProject.objects.ResponseObject;
 import com.akram.myProject.objects.UnitVO;
-import com.akram.myProject.services.ArticleService;
-import com.akram.myProject.services.CoefficientService;
-import com.akram.myProject.services.PriceService;
-import com.akram.myProject.services.QuantityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.akram.myProject.globalVariables.Translation.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static org.springframework.http.HttpStatus.*;
@@ -33,6 +29,7 @@ public class ArticleController {
     private final CoefficientService coefficientService;
     private final PriceService priceService;
     private final QuantityService quantityService;
+    private final TranslationService translationService;
     @GetMapping("/all")
     public ResponseEntity<List<ArticleVO>> findAllArticles(){
 
@@ -195,28 +192,66 @@ public class ArticleController {
         }
     }
     @PostMapping("/unit/add")
-    public ResponseEntity<List<UnitVO>> addUnit(@RequestBody Unit unit){
+    public ResponseEntity<ResponseObject<UnitVO>> addUnit(@RequestBody Unit unit){
         try{
+            int res = -1;
             if(unit != null && unit.getName() != null && !unit.getName().isBlank()
                             && unit.getShortName() != null && !unit.getShortName().isBlank()){
-                articleService.addUnit(unit);
+                res = articleService.addUnit(unit);
             }
-            List<UnitVO> units = articleService.findAllUnits(LAZY);
-            return new ResponseEntity<>(units, OK);
+            ResponseObject<UnitVO> resData = new ResponseObject<>();
+            String msg = "";
+            switch (res){
+                case 0:
+                    List<UnitVO> units = articleService.findAllUnits(LAZY);
+                    resData.setListData(units);
+                    break;
+                case 1:
+                    msg = translationService.getTranslation(NAME_ALREADY_EXIST);
+                    resData.setErrorMessage(msg);
+                    break;
+                case 2:
+                    msg = translationService.getTranslation(SHORTNAME_ALREADY_EXIST);
+                    resData.setErrorMessage(msg);
+                    break;
+                default:
+                    msg = translationService.getTranslation(NAME_OR_SHORTNAME_EMPTY);
+                    resData.setErrorMessage(msg);
+            }
+            return new ResponseEntity<>(resData, OK);
         }catch (Exception e){
-            return new ResponseEntity<>(new ArrayList<>(), INTERNAL_SERVER_ERROR);
+            ResponseObject<UnitVO> resData = new ResponseObject<>();
+            resData.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(resData, INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/category/add")
-    public ResponseEntity<List<CategoryVO>> addCategory(@RequestBody Category category){
+    public ResponseEntity<ResponseObject<CategoryVO>> addCategory(@RequestBody Category category){
         try{
+            int res = -1;
             if(category != null && category.getCategoryName() != null && !category.getCategoryName().isBlank()){
-                articleService.addCategory(category);
+                res = articleService.addCategory(category);
             }
-            List<CategoryVO> categories = articleService.findAllCategories(LAZY);
-            return new ResponseEntity<>(categories, OK);
+            ResponseObject<CategoryVO> resData = new ResponseObject<>();
+            String msg = "";
+            switch (res){
+                case 0:
+                    List<CategoryVO> categories = articleService.findAllCategories(LAZY);
+                    resData.setListData(categories);
+                    break;
+                case 1:
+                    msg = translationService.getTranslation(NAME_ALREADY_EXIST);
+                    resData.setErrorMessage(msg);
+                    break;
+                default:
+                    msg = translationService.getTranslation(NAME_OR_SHORTNAME_EMPTY);
+                    resData.setErrorMessage(msg);
+            }
+            return new ResponseEntity<>(resData, OK);
         }catch (Exception e){
-            return new ResponseEntity<>(new ArrayList<>(), INTERNAL_SERVER_ERROR);
+            ResponseObject<CategoryVO> resData = new ResponseObject<>();
+            resData.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(resData, INTERNAL_SERVER_ERROR);
         }
     }
 }

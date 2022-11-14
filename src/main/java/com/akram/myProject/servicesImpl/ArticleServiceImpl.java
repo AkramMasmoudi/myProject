@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Service
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
@@ -93,11 +95,28 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void addUnit(Unit unit) {
-        unitRepository.save(unit);
+    public int addUnit(Unit unit) {
+        List<UnitVO> availableUnits = findAllUnits(LAZY);
+        boolean existShortName = availableUnits.stream().anyMatch(currUnit -> currUnit.getShortName().equals(unit.getShortName()));
+        boolean existName = availableUnits.stream().anyMatch(currUnit -> currUnit.getName().equals(unit.getName()));
+        if(!existName && !existShortName){
+            unitRepository.save(unit);
+            return 0;
+        }else if(existName){
+            return 1;
+        } else {
+            return 2;
+        }
     }
     @Override
-    public void addCategory(Category category) {
-       categoryRepository.save(category);
+    public int addCategory(Category category) {
+        List<CategoryVO> availableCategories = findAllCategories(LAZY);
+        boolean existCategory = availableCategories.stream().anyMatch(currCategory -> currCategory.getCategoryName().equals(category.getCategoryName()));
+        if(!existCategory){
+            categoryRepository.save(category);
+            return 0;
+        }else{
+            return 1;
+        }
     }
 }
