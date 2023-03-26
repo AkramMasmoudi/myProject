@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,13 +19,13 @@ import java.util.List;
 public class Category implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(unique = true,nullable = false,updatable = false)
     private Long categoryId;
     @Column
     private String categoryName;
     @Column
-    @OneToMany(mappedBy = "articleCategoryId",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "articleCategoryId",fetch = LAZY)
     private List<Article> lstArticles;
 
     public Category(String categoryName) {

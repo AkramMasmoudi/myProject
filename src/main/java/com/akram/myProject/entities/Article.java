@@ -8,6 +8,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,31 +20,31 @@ import java.util.List;
 @Table(name = "Article")
 public class Article implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(unique = true,nullable = false,updatable = false)
     private Long articleId;
     @Column(nullable = false)
     private String articleName;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "categoryId")
     private Category articleCategoryId;
     @ToString.Exclude
     @Column
-    @OneToMany(mappedBy = "coefficientArticleId",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "coefficientArticleId",fetch = LAZY)
     private List<Coefficient> lstCoefficient;
     @ToString.Exclude
     @Column
-    @OneToMany(mappedBy = "quantityArticleId",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quantityArticleId",fetch = LAZY)
     private List<Quantities> lstQuantity;
     @ToString.Exclude
     @Column
-    @OneToMany(mappedBy = "priceArticleId",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "priceArticleId",fetch = LAZY)
     private List<Price> lstPrices;
     @Column
     private String articleReference;
     @ToString.Exclude
     @Column
-    @OneToMany(mappedBy = "orderLineArticleId",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "orderLineArticleId",fetch = LAZY)
     private List<OrderLine> lstOrderLines;
     @Column(columnDefinition = "boolean default false")
     private Boolean removed;

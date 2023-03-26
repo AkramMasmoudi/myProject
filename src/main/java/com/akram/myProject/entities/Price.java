@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Locale;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,7 +22,7 @@ import java.util.Locale;
 @Table(name = "Price")
 public class Price implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(unique = true,nullable = false,updatable = false)
     private Long priceId;
     @ManyToOne()

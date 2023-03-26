@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,7 +17,7 @@ import java.io.Serializable;
 @Table(name = "Quantity")
 public class Quantities implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(unique = true,nullable = false,updatable = false)
     private Long quantityId;
     @ManyToOne()

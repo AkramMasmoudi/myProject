@@ -9,6 +9,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -19,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class User implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(unique = true,nullable = false,updatable = false)
     private Long userId;
     @Column(unique = true,nullable = false)
@@ -30,7 +33,7 @@ public class User implements Serializable {
     @Setter(value=AccessLevel.NONE)
     private String userRole;
     @Column
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = LAZY)
     private List<Settings> lstSettings;
     public void setUserRole(String userRole) {
         if(UserRoles.ADMIN.equalsIgnoreCase(userRole) || UserRoles.USER.equalsIgnoreCase(userRole) || UserRoles.WATCHER.equalsIgnoreCase(userRole))

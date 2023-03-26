@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,7 +17,7 @@ import java.util.List;
 @Table(name = "Unit")
 public class Unit implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(unique = true,nullable = false,updatable = false)
     private Long unitId;
     @Column(unique = true,nullable = false)

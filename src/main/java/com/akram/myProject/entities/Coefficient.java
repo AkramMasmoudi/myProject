@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.io.Serializable;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -14,7 +17,7 @@ import java.io.Serializable;
 @Table(name = "Coefficient")
 public class Coefficient implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(nullable = false)
     private Long coefficientId;
     @ManyToOne()
