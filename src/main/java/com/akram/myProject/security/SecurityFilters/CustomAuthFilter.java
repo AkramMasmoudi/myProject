@@ -62,7 +62,7 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter {
         User user = (User) auth.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256(CODE_HMAC256.getBytes());
         List<String> lstRoles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        int expiresDateCoefficient = lstRoles.contains(UserRoles.ADMIN) ? 1 : 10;
+        int expiresDateCoefficient = lstRoles.contains(UserRoles.ADMIN) ? 1 : 24;
         String accessToken = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expiresDateCoefficient * 60 * 60 * 1000))

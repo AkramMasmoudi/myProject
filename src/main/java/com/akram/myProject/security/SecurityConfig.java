@@ -33,6 +33,7 @@ public class SecurityConfig  {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         final String userPattern = "/user/**";
+        final String authPattern = "/user/authenticated";
         final String allPattern = "/**";
 
         CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
@@ -42,7 +43,9 @@ public class SecurityConfig  {
 
         http.cors().configurationSource(request -> corsConfiguration);
         http.sessionManagement().sessionCreationPolicy(STATELESS);
+        http.authorizeRequests().mvcMatchers(authPattern).authenticated();
         http.authorizeRequests().mvcMatchers(userPattern).hasAuthority(ADMIN);//permitAll()
+
         http.authorizeRequests().mvcMatchers(POST,allPattern).hasAnyAuthority(USER,ADMIN);
         http.authorizeRequests().mvcMatchers(PUT,allPattern).hasAnyAuthority(USER,ADMIN);
         http.authorizeRequests().mvcMatchers(PATCH,allPattern).hasAnyAuthority(USER,ADMIN);

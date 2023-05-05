@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.FetchType;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     BCryptPasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public void saveUser(User user) throws AuthenticationException{
         if(user != null){
            user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
