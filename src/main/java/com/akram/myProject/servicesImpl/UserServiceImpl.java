@@ -1,16 +1,14 @@
 package com.akram.myProject.servicesImpl;
 
-import com.akram.myProject.entities.Unit;
 import com.akram.myProject.entities.User;
-import com.akram.myProject.objects.UnitVO;
 import com.akram.myProject.objects.UserVO;
 import com.akram.myProject.repositories.UserRepository;
+import com.akram.myProject.services.TranslationService;
 import com.akram.myProject.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,17 +37,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     UserRepository userRepository;
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
-
+    @Autowired
+    TranslationService translationService;
     @Override
     @Transactional
-    public void saveUser(User user) throws AuthenticationException{
+    public User saveUser(User user) throws AuthenticationException{
         if(user != null){
            user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
             log.info(INFO_SAVE+user.getUserPassword(),user.getUserLogin());
-            userRepository.save(user);
+            return userRepository.save(user);
         }else
             throw new NullPointerException(USER_NULL) ;
 
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteUser(long id) {
+        User user = findAuthenticatedUser();
+        if(user.getUserId() == id){
+            return false;
+        }
+        userRepository.deleteById(id);
+        return true;
     }
 
     @Override

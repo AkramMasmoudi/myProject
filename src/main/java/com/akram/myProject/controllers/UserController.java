@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.akram.myProject.globalVariables.Translation.NAME_ALREADY_EXIST;
 import static javax.persistence.FetchType.LAZY;
 import static org.springframework.http.HttpStatus.*;
 
@@ -25,27 +26,52 @@ public class UserController {
    private final UserService userService;
     @PostMapping("/save")
     @CrossOrigin("*")
-    public ResponseEntity<User> saveUser(@RequestBody User user){
-
+    public ResponseEntity<ResponseObject<UserVO>> saveUser(@RequestBody User user){
+        List<UserVO> users;
+        ResponseObject< UserVO> response = new ResponseObject<>();
         try{
-            userService.saveUser(user);
-            return new ResponseEntity<User>(user, OK);
+            User savedUser = userService.saveUser(user);
+            UserVO userVO = new UserVO(savedUser,LAZY);
+            users = userService.findAllUsers();
+            response.setListData(users);
+            response.setSingleData(userVO);
+            return new ResponseEntity<>(response, OK);
         }catch (Exception e){
-            return new ResponseEntity<User>(user, UNAUTHORIZED);
+            response.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
         }
-
     }
-
+    @DeleteMapping ("/delete/{id}")
+    @CrossOrigin("*")
+    public ResponseEntity<ResponseObject<UserVO>> deleteUser(@PathVariable long id){
+        List<UserVO> users;
+        ResponseObject< UserVO> response = new ResponseObject<>();
+        try{
+            boolean deleted = userService.deleteUser(id);
+            if(!deleted){
+                return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
+            }
+            users = userService.findAllUsers();
+            response.setListData(users);
+            return new ResponseEntity<>(response, OK);
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
+        }
+    }
     @GetMapping("/users")
     @CrossOrigin("*")
     @Transactional
-    public ResponseEntity< List<UserVO>> findAllUser(){
-        List<UserVO> users = new ArrayList<>();
+    public ResponseEntity< ResponseObject<UserVO>> findAllUser(){
+        List<UserVO> users;
+        ResponseObject< UserVO> response = new ResponseObject<>();
         try{
             users = userService.findAllUsers();
-            return new ResponseEntity< List<UserVO>>(users, OK);
+            response.setListData(users);
+            return new ResponseEntity<>(response, OK);
         }catch (Exception e){
-            return new ResponseEntity< List<UserVO>>(users, SERVICE_UNAVAILABLE);
+            response.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -53,16 +79,16 @@ public class UserController {
     @GetMapping("/authenticated")
     @CrossOrigin("*")
     public ResponseEntity<ResponseObject< UserVO>> findAuthenticatedUser(){
-        UserVO userVO = new UserVO();
+        UserVO userVO;
         ResponseObject< UserVO> response = new ResponseObject<>();
         try{
             User user = userService.findAuthenticatedUser();
             userVO = new UserVO(user, LAZY);
             response.setSingleData(userVO);
-            return new ResponseEntity<ResponseObject<UserVO>>(response, OK);
+            return new ResponseEntity<>(response, OK);
         }catch (Exception e){
             response.setErrorMessage(e.getMessage());
-            return new ResponseEntity<ResponseObject<UserVO>>(response,SERVICE_UNAVAILABLE);
+            return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
         }
     }
 }
