@@ -1,6 +1,7 @@
 package com.akram.myProject.servicesImpl;
 
 import com.akram.myProject.entities.User;
+import com.akram.myProject.globalVariables.UserRoles;
 import com.akram.myProject.objects.UserVO;
 import com.akram.myProject.repositories.UserRepository;
 import com.akram.myProject.services.TranslationService;
@@ -95,4 +96,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return new ArrayList<>();
         }
     }
+
+    @Override
+    @Transactional
+    public UserVO modifUser(String prevUserLogin,User newUser){
+        String userRole = newUser.getUserRole();
+        if(!UserRoles.LIST.contains(userRole)){
+            throw new IllegalArgumentException("undefined role");
+        }
+        String userLogin = newUser.getUserLogin();
+        User userRep = this.userRepository.findUserByUserLogin(prevUserLogin);
+        userRep.setUserLogin(userLogin);
+        userRep.setUserRole(userRole);
+        saveUser(userRep);
+        return new UserVO(userRep, LAZY);
+    }
+
 }

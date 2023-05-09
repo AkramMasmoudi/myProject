@@ -1,6 +1,7 @@
 package com.akram.myProject.controllers;
 
 import com.akram.myProject.entities.User;
+import com.akram.myProject.globalVariables.UserRoles;
 import com.akram.myProject.objects.ResponseObject;
 import com.akram.myProject.objects.UserVO;
 import com.akram.myProject.services.UserService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.util.EnumUtils;
 
 import javax.persistence.FetchType;
 import java.util.ArrayList;
@@ -59,6 +61,27 @@ public class UserController {
             return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping ("/modif")
+    @CrossOrigin("*")
+    public ResponseEntity<ResponseObject<UserVO>> modifUser(@RequestParam(required = true) String prevUserLogin,@RequestParam(required = true) String newUserLogin,@RequestParam(required = true) String newUserRole ){
+        User newUser = new User();
+        newUser.setUserLogin(newUserLogin);
+        newUser.setUserRole(newUserRole);
+        List<UserVO> users;
+        ResponseObject< UserVO> response = new ResponseObject<>();
+        try{
+            UserVO userModified = userService.modifUser(prevUserLogin,newUser);
+            users = userService.findAllUsers();
+            response.setListData(users);
+            response.setSingleData(userModified);
+            return new ResponseEntity<>(response, OK);
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/users")
     @CrossOrigin("*")
     @Transactional
