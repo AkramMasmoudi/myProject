@@ -1,5 +1,6 @@
 package com.akram.myProject.servicesImpl;
 
+import ch.qos.logback.core.net.server.Client;
 import com.akram.myProject.entities.Person;
 import com.akram.myProject.globalVariables.PersonType;
 import com.akram.myProject.objects.PersonVO;
@@ -8,6 +9,7 @@ import com.akram.myProject.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.FetchType;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,5 +28,13 @@ public class PersonServiceImpl implements PersonService {
         }else{
             throw new NullPointerException("personType ("+personType+") is not valid");
         }
+    }
+
+    @Override
+    public PersonVO saveClient(PersonVO personVO) {
+        personVO.setPersonType(PersonType.client);
+        Person person = new Person(personVO);
+        Person personSaved = this.personRepository.save(person);
+        return new PersonVO(personSaved, LAZY);
     }
 }

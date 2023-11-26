@@ -19,24 +19,21 @@ import static javax.persistence.FetchType.LAZY;
 @ToString
 public class PersonVO implements Serializable {
     private Long personId;
-    private String personFirstName;
-    private String personLastName;
+    private PersonIdentityVO personIdentityVO;
     private String personType;
     private String personTel;
     private String personTel2;
     private String personAddress;
     private String personEmail;
     private List<OrderVO> lstOrders;
-
     public PersonVO(Person person, FetchType fetchType) {
         this.personId = person.getPersonId();
-        this.personFirstName = person.getPersonFirstName();
-        this.personLastName = person.getPersonLastName();
         this.personType = person.getPersonType();
         this.personTel = person.getPersonTel();
         this.personTel2 = person.getPersonTel2();
         this.personAddress = person.getPersonAddress();
         this.personEmail = person.getPersonEmail();
+        this.personIdentityVO = new PersonIdentityVO(person);
         if(fetchType.equals(LAZY)){
             this.lstOrders = new ArrayList<>();
         }else{

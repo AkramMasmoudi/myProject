@@ -1,5 +1,5 @@
 /*INSERT INTO `newproject`.`users`(`user_id`,`user_login`,`user_password`,`user_role`)VALUES('1','ahmed','$2a$10$0ZVk0dqrLPecLE3xIntT5.IZfbCaPsftBong2Soo98s78r.lo6BCC','ADMIN');
-
+akram	$2a$10$MvOmxWx9B6j7Gw9UA.zZKO6mq3YQ6dmNSmqicM4ebXFAvwFAN.K/i	ADMIN
 INSERT INTO `newproject`.`users`(`user_id`,`user_login`,`user_password`,`user_role`)VALUES('2','akram','$2a$10$xBi7baugtMcdOpnmFvpIv.Hw87VkWA3RQZzB3Bcr1uUqZm1wPuVaO','ADMIN');
 INSERT INTO `newproject`.`users`(`user_id`,`user_login`,`user_password`,`user_role`)VALUES('1','ahmed','$2a$10$0ZVk0dqrLPecLE3xIntT5.IZfbCaPsftBong2Soo98s78r.lo6BCC','ADMIN');
 INSERT INTO `newproject`.`unit` (`unit_id`, `name`, `short_name`) VALUES ('1', 'metre carré', 'm2');
