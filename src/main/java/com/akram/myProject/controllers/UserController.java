@@ -1,24 +1,19 @@
 package com.akram.myProject.controllers;
 
 import com.akram.myProject.entities.User;
-import com.akram.myProject.globalVariables.UserRoles;
 import com.akram.myProject.objects.ResponseObject;
 import com.akram.myProject.objects.UserVO;
 import com.akram.myProject.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.util.EnumUtils;
 
-import javax.persistence.FetchType;
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.akram.myProject.globalVariables.Translation.NAME_ALREADY_EXIST;
 import static javax.persistence.FetchType.LAZY;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/user")
