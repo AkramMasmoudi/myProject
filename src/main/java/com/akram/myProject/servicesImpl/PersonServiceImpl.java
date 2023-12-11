@@ -1,19 +1,19 @@
 package com.akram.myProject.servicesImpl;
 
-import ch.qos.logback.core.net.server.Client;
 import com.akram.myProject.entities.Person;
 import com.akram.myProject.globalVariables.PersonType;
 import com.akram.myProject.objects.PersonVO;
 import com.akram.myProject.repositories.PersonRepository;
 import com.akram.myProject.services.PersonService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.FetchType;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static javax.persistence.FetchType.LAZY;
+@Slf4j
 @Service
 public class PersonServiceImpl implements PersonService {
 
@@ -36,5 +36,16 @@ public class PersonServiceImpl implements PersonService {
         Person person = new Person(personVO);
         Person personSaved = this.personRepository.save(person);
         return new PersonVO(personSaved, LAZY);
+    }
+
+    @Override
+    public boolean deletePerson(Long personId) {
+        try {
+            this.personRepository.deletePersonByPersonId(personId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+        return true;
     }
 }

@@ -32,16 +32,34 @@ public class ClientController {
             return new ResponseEntity<>(response, INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping ("/add")
-    public ResponseEntity<ResponseObject<PersonVO>> saveClient(@RequestBody PersonVO newClient){
+    @PostMapping ("/addOrUpdate")
+    public ResponseEntity<ResponseObject<PersonVO>> saveClient(@RequestBody PersonVO client){
         ResponseObject<PersonVO> response = new ResponseObject<>();
         try{
-            if(newClient != null){
-                PersonVO person = personService.saveClient(newClient);
+            if(client != null){
+                PersonVO person = personService.saveClient(client);
                 response.setSingleData(person);
                 return new ResponseEntity<>(response, OK);
             }else{
                 response.setErrorMessage("Request body null when trying to add a client");
+                return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
+            }
+        }catch (Exception e){
+            response.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/delete/{personId}")
+    public ResponseEntity<ResponseObject<String>> delete(@PathVariable Long personId){
+        ResponseObject<String> response = new ResponseObject<>();
+        try{
+            if(personId != null){
+                boolean deleted = personService.deletePerson(personId);
+                response.setSingleData(Boolean.toString(deleted));
+                return new ResponseEntity<>(response, OK);
+            }else{
+                response.setErrorMessage("personId null when trying to delete a person");
                 return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
             }
         }catch (Exception e){

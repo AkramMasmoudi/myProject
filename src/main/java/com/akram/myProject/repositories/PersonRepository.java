@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PersonRepository extends JpaRepository<Person,Long> {
     List<Person> findByPersonType(String personType);
+
+    void deletePersonByPersonId(Long personId);
 }

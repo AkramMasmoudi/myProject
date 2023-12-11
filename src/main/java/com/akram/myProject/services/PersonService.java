@@ -7,4 +7,5 @@ import java.util.List;
 public interface PersonService {
     public List<PersonVO> findByPersonType(String personType);
     public PersonVO saveClient(PersonVO personVO);
+    public boolean deletePerson(Long personId);
 }
