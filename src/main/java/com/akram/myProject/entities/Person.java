@@ -46,11 +46,11 @@ public class Person implements Serializable {
     private List<Order> lstOrders;
 
     public void setPersonType(String personType) {
-        if(PersonType.supplier.equalsIgnoreCase(personType) || PersonType.client.equalsIgnoreCase(personType))
+        if(PersonType.SUPPLIER.equalsIgnoreCase(personType) || PersonType.CLIENT.equalsIgnoreCase(personType))
             this.personType = personType.toUpperCase();
         else {
             System.err.println("error in setPersonType : personType value ("+personType+") is not valid");
-            this.personType = PersonType.client;
+            this.personType = PersonType.CLIENT;
         }
     }
 

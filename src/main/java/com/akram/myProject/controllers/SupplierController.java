@@ -15,33 +15,33 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/person/client")
+@RequestMapping("/person/supplier")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 @Slf4j
-public class ClientController {
+public class SupplierController {
     private final PersonService personService;
     @GetMapping("/all")
-    public ResponseEntity<ResponseObject<PersonVO>> findAllClients(){
+    public ResponseEntity<ResponseObject<PersonVO>> findAllSuppliers(){
         ResponseObject<PersonVO> response = new ResponseObject<>();
         try{
-            List<PersonVO> clients = personService.findByPersonType(PersonType.CLIENT);
-            response.setListData(clients);
+            List<PersonVO> suppliers = personService.findByPersonType(PersonType.SUPPLIER);
+            response.setListData(suppliers);
             return new ResponseEntity<>(response, OK);
         }catch (Exception e){
             return new ResponseEntity<>(response, INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping ("/addOrUpdate")
-    public ResponseEntity<ResponseObject<PersonVO>> saveClient(@RequestBody PersonVO client){
+    @PostMapping("/addOrUpdate")
+    public ResponseEntity<ResponseObject<PersonVO>> saveSupplier(@RequestBody PersonVO supplier){
         ResponseObject<PersonVO> response = new ResponseObject<>();
         try{
-            if(client != null){
-                PersonVO person = personService.saveClient(client);
+            if(supplier != null){
+                PersonVO person = personService.saveSupplier(supplier);
                 response.setSingleData(person);
                 return new ResponseEntity<>(response, OK);
             }else{
-                response.setErrorMessage("Request body null when trying to add a CLIENT");
+                response.setErrorMessage("Request body null when trying to add a SUPPLIER");
                 return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
             }
         }catch (Exception e){
@@ -50,16 +50,16 @@ public class ClientController {
         }
     }
 
-    @DeleteMapping("/delete/{clientId}")
-    public ResponseEntity<ResponseObject<String>> deleteClient(@PathVariable Long clientId){
+    @DeleteMapping("/delete/{supplierId}")
+    public ResponseEntity<ResponseObject<String>> deleteSupplier(@PathVariable Long supplierId){
         ResponseObject<String> response = new ResponseObject<>();
         try{
-            if(clientId != null){
-                boolean deleted = personService.deletePerson(clientId);
+            if(supplierId != null){
+                boolean deleted = personService.deletePerson(supplierId);
                 response.setSingleData(Boolean.toString(deleted));
                 return new ResponseEntity<>(response, OK);
             }else{
-                response.setErrorMessage("clientId null when trying to delete a person");
+                response.setErrorMessage("supplierId null when trying to delete a person");
                 return new ResponseEntity<>(response,INTERNAL_SERVER_ERROR);
             }
         }catch (Exception e){

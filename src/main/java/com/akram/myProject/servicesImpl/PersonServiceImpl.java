@@ -23,7 +23,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonVO> findByPersonType(String personType) {
-        if(PersonType.client.equals(personType) || PersonType.supplier.equals(personType)){
+        if(PersonType.CLIENT.equals(personType) || PersonType.SUPPLIER.equals(personType)){
             List<Person> persons = this.personRepository.findByPersonType(personType);
             return persons.stream().map(p -> new PersonVO(p,LAZY)).collect(Collectors.toList());
         }else{
@@ -33,12 +33,20 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonVO saveClient(PersonVO personVO) {
-        personVO.setPersonType(PersonType.client);
+        return savePerson(personVO,PersonType.CLIENT);
+    }
+
+    @Override
+    public PersonVO saveSupplier(PersonVO personVO) {
+        return savePerson(personVO,PersonType.SUPPLIER);
+    }
+
+    private PersonVO savePerson(PersonVO personVO,String personType){
+        personVO.setPersonType(personType);
         Person person = new Person(personVO);
         Person personSaved = this.personRepository.save(person);
         return new PersonVO(personSaved, LAZY);
     }
-
     @Override
     @Transactional
     public boolean deletePerson(Long personId) {
