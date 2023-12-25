@@ -49,7 +49,7 @@ public class ArticleController {
             ArticleVO article = articleService.findArticleById(articleId,EAGER);
             return new ResponseEntity<>(article, OK);
         }catch (Exception e){
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -107,18 +107,18 @@ public class ArticleController {
             articleSaved.setArticleCategoryId(new Category());
             return new ResponseEntity<>(articleSaved, OK);
         }catch (Exception e){
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/coefficient")
     public ResponseEntity<List<Coefficient>> saveCoefficients(@RequestBody Coefficient[] coefficients){
         try{
             if(coefficients.length < 1 || coefficients[0].getCoefficientArticleId() == null)
-                return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
 
             Optional<Article> article = articleService.findArticleById(coefficients[0].getCoefficientArticleId().getArticleId());
             if(!article.isPresent())
-                return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
 
             List<Coefficient> coefficientsToSave = Arrays.stream(coefficients)
                     .map((Coefficient c)-> {
@@ -130,7 +130,7 @@ public class ArticleController {
             coefficientsSaved.stream().peek((Coefficient c) -> c.setCoefficientArticleId(new Article())).collect(Collectors.toList());
             return new ResponseEntity<>(coefficientsSaved, OK);
         }catch (Exception e){
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/price")
@@ -154,18 +154,18 @@ public class ArticleController {
             pricesSaved.stream().peek((Price p) -> p.setPriceArticleId(new Article())).collect(Collectors.toList());
             return new ResponseEntity<>(pricesSaved, OK);
         }catch (Exception e){
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/quantity")
     public ResponseEntity<List<Quantities>> saveQuantities(@RequestBody Quantities[] quantities){
         try{
             if(quantities.length < 1 || quantities[0].getQuantityArticleId() == null)
-                return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
 
             Optional<Article> article = articleService.findArticleById(quantities[0].getQuantityArticleId().getArticleId());
             if(!article.isPresent())
-                return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
 
             List<Quantities> quantitiesToSave = Arrays.stream(quantities)
                     .map((Quantities q)-> {
@@ -178,7 +178,7 @@ public class ArticleController {
             quantitiesSaved.stream().peek((Quantities q) -> q.setQuantityArticleId(new Article())).collect(Collectors.toList());
             return new ResponseEntity<>(quantitiesSaved, OK);
         }catch (Exception e){
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping ("/safeRemove")
@@ -188,7 +188,7 @@ public class ArticleController {
             List<ArticleVO> articles = articleService.findAllArticles(EAGER);
             return new ResponseEntity<>(articles, OK);
         }catch (Exception e){
-            return new ResponseEntity<>(null,INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("/unit/add")

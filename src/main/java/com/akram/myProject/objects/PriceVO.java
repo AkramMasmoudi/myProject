@@ -1,13 +1,10 @@
 package com.akram.myProject.objects;
 
-import com.akram.myProject.entities.Coefficient;
 import com.akram.myProject.entities.Price;
 import lombok.*;
 
 import javax.persistence.FetchType;
 import java.io.Serializable;
-
-import static javax.persistence.FetchType.LAZY;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,13 +16,13 @@ public class PriceVO implements Serializable {
     private UnitVO unit;
     private double price;
     private ArticleVO priceArticle;
-    private String priceType;
+    private char priceType;
 
     public PriceVO(Price price, FetchType fetchType){
         this.priceId = price.getPriceId();
-        this.price = price.getPrice();
+        this.price = price.getValue();
         this.priceType = price.getPriceType();
-        this.unit = new UnitVO(price.getUnitId(),LAZY);
-        this.priceArticle = new ArticleVO(price.getPriceArticleId(),LAZY);
+        this.unit = new UnitVO(price.getUnitId(),fetchType);
+        this.priceArticle = new ArticleVO(price.getPriceArticleId(),fetchType);
     }
 }

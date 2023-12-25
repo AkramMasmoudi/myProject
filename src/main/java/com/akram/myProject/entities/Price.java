@@ -1,15 +1,11 @@
 package com.akram.myProject.entities;
 
-import com.akram.myProject.globalVariables.UserRoles;
 import lombok.*;
-import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
-import javax.xml.datatype.DatatypeConfigurationException;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Locale;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -30,17 +26,18 @@ public class Price implements Serializable {
     private Unit unitId;
     @Column(nullable = false)
     @Value("${my.default.price:0}")
-    private double price;
+    private double value;
     @ManyToOne()
     @JoinColumn(name = "articleId")
     private Article priceArticleId;
-    @Column(nullable = false,length = 1)
+    @Column(nullable = false)
     @Setter(value=AccessLevel.NONE)
-    private String priceType;
+    private char priceType;
 
-    public void setPriceType(String priceType) {
-        if(priceType!= null && Arrays.asList("s","p").contains(priceType.toLowerCase())){
-            this.priceType = priceType.toLowerCase();
+    public void setPriceType(char priceType) {
+        char priceTypeLowerCase = Character.toLowerCase(priceType);
+        if(Arrays.asList('s','p').contains(priceTypeLowerCase)){
+            this.priceType = priceTypeLowerCase;
         }else{
             throw new NullPointerException("priceType ("+ priceType +") is not valid : the type must be s or p");
         }
